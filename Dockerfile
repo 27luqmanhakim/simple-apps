@@ -3,4 +3,6 @@ WORKDIR /app
 ADD . /app
 RUN npm install
 CMD npm start
-EXPOSE 3000 #ini target port
+
+#ini target port, expose port bebas pake yg kosong
+EXPOSE 3000 
