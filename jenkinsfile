@@ -38,6 +38,14 @@ pipeline {
                 '''
             }
         }
+                }
+        stage('Upload to registry image') {
+            steps {
+                sh '''
+                docker tag simple-apps-apps 27luqmanhakim/simple-apps-apps:v1.0
+                docker push 27luqmanhakim/simple-apps-apps:v1.0
+                '''
+            }
+        }
     }
 }
-​
