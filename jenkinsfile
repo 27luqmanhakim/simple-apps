@@ -2,11 +2,21 @@ pipeline {
     agent { label 'docker-luqman' }
     
     tools {nodejs "Nodejs-18.16"}
-
+    
+    environment {
+        GIt_BRANCH      = 'main'
+        GIT_REPO        = 'https://github.com/27luqmanhakim/simple-apps.git'
+        SONAR_HOST      = 'http://172.23.15.64:9000'
+        SONAR_PROJECT   = 'simple-apps'
+        SONAR_TOKEN     = 'squ_08b66c2ce598888d70d4735b314247f691cdc939'  
+        IMAGE_NAME      = 'simple-apps-apps'
+        DOCKER_HUB_USER = '27luqmanhakim'
+        VERSION         = 'v1.0'
+    }
     stages {
         stage('Checkout SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/27luqmanhakim/simple-apps.git'
+                git branch: ${GIt_BRANCH}, url: ${GIT_REPO}
             }
         }
         stage('Build') {
@@ -22,10 +32,10 @@ pipeline {
         stage('Code Review with Sonarqube') {
             steps {
                 sh '''sonar-scanner \
-                -Dsonar.projectKey=simple-apps \
+                -Dsonar.projectKey=${SONAR_PROJECT} \
                 -Dsonar.sources=. \
-                -Dsonar.host.url=http://172.23.15.64:9000 \
-                -Dsonar.login=squ_08b66c2ce598888d70d4735b314247f691cdc939'''
+                -Dsonar.host.url=${SONAR_HOST} \
+                -Dsonar.login=${SONAR_TOKEN}'''
             }
         }
         stage('Deploy compose') {
@@ -41,8 +51,8 @@ pipeline {
         stage('Upload to registry image') {
             steps {
                 sh '''
-                docker tag simple-apps-apps 27luqmanhakim/simple-apps-apps:v1.0
-                docker push 27luqmanhakim/simple-apps-apps:v1.0
+                docker tag ${IMAGE_NAME} 27luqmanhakim/${IMAGE_NAME}:${VERSION}
+                docker push 27luqmanhakim/${IMAGE_NAME}:${VERSION}
                 '''
             }
         }
