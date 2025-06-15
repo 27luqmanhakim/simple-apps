@@ -4,7 +4,7 @@ pipeline {
     tools {nodejs "Nodejs-18.16"}
     
     environment {
-        GIt_BRANCH      = 'main'
+        GIT_BRANCH      = 'main'
         GIT_REPO        = 'https://github.com/27luqmanhakim/simple-apps.git'
         SONAR_HOST      = 'http://172.23.15.64:9000'
         SONAR_PROJECT   = 'simple-apps'
@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('Checkout SCM') {
             steps {
-                git branch: ${GIt_BRANCH}, url: ${GIT_REPO}
+                git branch: ${GIT_BRANCH}, url: ${GIT_REPO}
             }
         }
         stage('Build') {
